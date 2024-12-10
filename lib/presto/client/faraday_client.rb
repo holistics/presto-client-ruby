@@ -53,7 +53,9 @@ module Presto::Client
     url = "#{ssl ? "https" : "http"}://#{server}"
     proxy = options[:http_proxy] || options[:proxy]  # :proxy is obsoleted
 
-    faraday_options = {url: url, proxy: "#{proxy}"}
+    faraday_options = {url: url}
+    # https://github.com/treasure-data/trino-client-ruby/pull/92
+    faraday_options[:proxy] = "#{proxy}" if proxy
     faraday_options[:ssl] = ssl if ssl
 
     faraday = Faraday.new(faraday_options) do |faraday|

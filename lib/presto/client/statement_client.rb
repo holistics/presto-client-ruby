@@ -196,7 +196,7 @@ module Presto::Client
       begin
         begin
           response = @faraday.get(uri)
-        rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+        rescue Faraday::TimeoutError, Faraday::ConnectionFailed
           # temporally error to retry
           response = nil
         rescue => e
