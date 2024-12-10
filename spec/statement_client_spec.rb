@@ -76,9 +76,9 @@ describe Presto::Client::StatementClient do
     }).to_return(body: lambda{|req|if retry_p; response_json.to_json; else; retry_p=true; raise Timeout::Error.new("execution expired"); end })
 
     sc = StatementClient.new(faraday, query, options.merge(http_open_timeout: 1))
-    sc.has_next?.should be_true
-    sc.advance.should be_true
-    retry_p.should be_true
+    expect(sc.has_next?).to eq true
+    expect(sc.advance).to eq true
+    expect(retry_p).to eq true
   end
 
   it "uses 'Accept: application/x-msgpack' if option is set" do
@@ -108,9 +108,9 @@ describe Presto::Client::StatementClient do
 
     options.merge!(http_open_timeout: 1, enable_x_msgpack: "application/x-msgpack")
     sc = StatementClient.new(faraday, query, options)
-    sc.has_next?.should be_true
-    sc.advance.should be_true
-    retry_p.should be_true
+    expect(sc.has_next?).to eq true
+    expect(sc.advance).to eq true
+    expect(retry_p).to eq true
   end
 
   # presto version could be "V0_ddd" or "Vddd"
@@ -188,8 +188,8 @@ describe Presto::Client::StatementClient do
 
       sc = StatementClient.new(faraday, query, options.merge(http_open_timeout: 1))
       sc.query_id.should == "queryid"
-      sc.has_next?.should be_true
-      sc.advance.should be_true
+      expect(sc.has_next?).to eq true
+      expect(sc.advance).to eq true
       sc.query_id.should == "queryid"
     end
   end
